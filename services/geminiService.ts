@@ -1,10 +1,8 @@
 import { GoogleGenAI, Chat } from "@google/genai";
 import { MachinerySpec, ScheduleTask } from "../types";
 
-// Ensure you have your API Key in your environment variables or replace specifically for local testing
-const apiKey = process.env.API_KEY || ''; 
-
-const ai = new GoogleGenAI({ apiKey });
+// The API key must be obtained exclusively from the environment variable process.env.API_KEY.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const SYSTEM_INSTRUCTION = `
 You are AgriSmart, an expert Agricultural Machinery Operations and Maintenance AI Assistant.
@@ -62,7 +60,9 @@ export const sendMessageToGemini = async (message: string): Promise<string> => {
     if (!chatSession) throw new Error("Chat session not initialized");
     
     const result = await chatSession.sendMessage({ message });
-    return result.text;
+    // Explicitly handle potentially undefined text property
+    const responseText = result.text;
+    return responseText ? responseText : "";
   } catch (error) {
     console.error("Gemini API Error:", error);
     return "Sorry, I encountered an error connecting to the agricultural database. Please check your connection or API key.";
