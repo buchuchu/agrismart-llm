@@ -76,20 +76,23 @@ export const sendMessageToGemini = async (message: string): Promise<string> => {
   } catch (error: any) {
     console.error("Gemini API Error Details:", error);
     
-    // Provide a more specific error message to the user based on the error code
-    let errorMessage = "Sorry, I encountered an error connecting to the agricultural database.";
+    // Parse the error message string (it often comes as a JSON string inside the message)
+    const errorString = JSON.stringify(error);
+    const errorMessageLower = (error.message || errorString).toLowerCase();
     
-    if (error.message?.includes("API key")) {
-      errorMessage += " (Error: Invalid or Missing API Key)";
-    } else if (error.message?.includes("403")) {
-      errorMessage += " (Error: Access Denied/Location not supported)";
-    } else if (error.message?.includes("429")) {
-      errorMessage += " (Error: Quota Exceeded)";
+    let userMessage = "Sorry, I encountered an error.";
+
+    if (errorMessageLower.includes("429") || errorMessageLower.includes("quota") || errorMessageLower.includes("exhausted")) {
+      userMessage = "🛑 **Quota Limit Exceeded (429)**\n\nYou have used up your free API requests for now. Please wait a minute or use a different Google API Key.";
+    } else if (errorMessageLower.includes("api key") || errorMessageLower.includes("400")) {
+      userMessage = "⚠️ **API Key Error**\n\nThe API Key is invalid or missing. Please check your Vercel settings.";
+    } else if (errorMessageLower.includes("503") || errorMessageLower.includes("overloaded")) {
+      userMessage = "🐢 **Server Busy**\n\nThe AI model is currently overloaded. Please try again in a few seconds.";
     } else {
-      errorMessage += ` (Details: ${error.message || "Unknown error"})`;
+      userMessage = `⚠️ **Connection Error**\n\nUnable to connect to Google Gemini. (Details: ${error.message || "Unknown error"})`;
     }
     
-    return errorMessage;
+    return userMessage;
   }
 };
 
