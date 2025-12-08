@@ -11,48 +11,28 @@ if (!rawKey) {
 
 const ai = new GoogleGenAI({ apiKey: rawKey || "MISSING_KEY" });
 
-const SYSTEM_INSTRUCTION = `
-You are AgriSmart, an expert Agricultural Machinery Operations and Maintenance AI Assistant.
-Your goal is to assist farmers with machinery selection, operational scheduling, and diagnostic troubleshooting.
+// Optimized System Instruction to save tokens (TPM - Tokens Per Minute quota)
+const SYSTEM_INSTRUCTION = `You are AgriSmart, an expert Agricultural Machinery Operations AI. Assist with machinery selection, scheduling, and diagnostics.
+OUTPUT RULES:
+Provide helpful text. For complex data, append a JSON block wrapped in \`\`\`json \`\`\`.
 
-**CRITICAL OUTPUT RULES:**
-You must provide helpful text responses. ADDITIONALLY, if the user asks for specific complex data, you MUST include a JSON block at the very end of your response strictly following these schemas. Wrap the JSON in \`\`\`json \`\`\`.
+1. Machinery Selection: If recommending machine, output JSON key "machinery":
+{"machinery": {"type": "Tractor"|"Harvester"|"Seeder", "brand": "Str", "model": "Str", "horsepower": "Str", "width": "Str", "suitableFor": "Str"}}
 
-1. **Machinery Selection:** If the user provides location, crop, soil, etc., and asks for a recommendation:
-   Output JSON with key "machinery":
-   {
-     "machinery": {
-       "type": "Tractor" | "Harvester" | "Seeder",
-       "brand": "Brand Name",
-       "model": "Model Number",
-       "horsepower": "e.g. 300 HP",
-       "width": "e.g. 12m working width",
-       "suitableFor": "Brief reason why this fits"
-     }
-   }
+2. Scheduling: If planning tasks, output JSON key "schedule":
+{"schedule": [{"id": "1", "taskName": "Str", "machine": "Str", "startDate": "YYYY-MM-DD", "durationDays": Num, "status": "Pending"}]}
 
-2. **Scheduling:** If the user asks for a schedule or dispatch plan:
-   Output JSON with key "schedule":
-   {
-     "schedule": [
-       { "id": "1", "taskName": "Plowing", "machine": "Tractor A", "startDate": "2023-10-25", "durationDays": 2, "status": "Pending" },
-       ...
-     ]
-   }
+3. Sensor Diagnostics: If analyzing vibration/sensor data, give clear text advice. No JSON needed.
 
-3. **Sensor Diagnostics:** If the user provides vibration/sensor data:
-   Analyze the data in text. If the vibration is high (>10mm/s), suggest specific checks (bearings, unbalance). 
-   You do not need to output JSON for diagnostics, just clear textual advice.
-
-**Tone:** Professional, practical, and agricultural-focused.
-`;
+Tone: Professional, agricultural.`;
 
 let chatSession: Chat | null = null;
 
 export const initializeChat = () => {
   try {
+    // Switch to gemini-2.0-flash-exp which often has better availability/quota for free tier users than 2.5-flash
     chatSession = ai.chats.create({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash-exp',
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
       },
@@ -83,7 +63,7 @@ export const sendMessageToGemini = async (message: string): Promise<string> => {
     let userMessage = "Sorry, I encountered an error.";
 
     if (errorMessageLower.includes("429") || errorMessageLower.includes("quota") || errorMessageLower.includes("exhausted")) {
-      userMessage = "🛑 **Quota Limit Exceeded (429)**\n\nYou have used up your free API requests for now. Please wait a minute or use a different Google API Key.";
+      userMessage = "🛑 **Quota Limit Exceeded (429)**\n\nThe free API limit has been reached. This is common with new keys.\n\n**Try this:**\n1. Wait 1-2 minutes and try again.\n2. Do not send messages too rapidly.";
     } else if (errorMessageLower.includes("api key") || errorMessageLower.includes("400")) {
       userMessage = "⚠️ **API Key Error**\n\nThe API Key is invalid or missing. Please check your Vercel settings.";
     } else if (errorMessageLower.includes("503") || errorMessageLower.includes("overloaded")) {
