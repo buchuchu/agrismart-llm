@@ -9,35 +9,24 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
-export interface MachinerySpec {
-  type: string;
-  brand: string;
-  model: string;
-  horsepower: string;
-  width: string;
-  suitableFor: string;
-  imageUrl?: string;
-}
-
-export interface ScheduleTask {
-  id: string;
-  taskName: string;
-  machine: string;
-  startDate: string; // ISO Date string
-  durationDays: number;
-  status: 'Pending' | 'In Progress' | 'Completed';
-}
-
 export interface SensorDataPoint {
   time: string;
   vibration: number; // mm/s
   temperature: number; // Celsius
 }
 
-// App State context to share data between chat and right panel
+// App State context to share data between components
 export interface AppContextState {
-  machinerySpec: MachinerySpec | null;
-  schedule: ScheduleTask[];
+  // New state for file analysis
+  isDataLoaded: boolean;
+  fileName: string | null;
   sensorData: SensorDataPoint[];
-  activePanel: 'machinery' | 'schedule' | 'sensor';
+}
+
+// New Interface for Chat History Sessions
+export interface ChatSession {
+  id: string;
+  title: string;
+  messages: ChatMessage[];
+  lastModified: number; // timestamp for sorting
 }
