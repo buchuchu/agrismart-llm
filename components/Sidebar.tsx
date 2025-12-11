@@ -1,5 +1,5 @@
 import React from 'react';
-import { History, PlusCircle, Settings, LogOut, User, Tractor, Trash2, MessageSquare } from 'lucide-react';
+import { History, PlusCircle, Settings, LogOut, User, Tractor, Trash2, MessageSquare, BrainCircuit } from 'lucide-react';
 import { ChatSession } from '../types';
 
 interface SidebarProps {
@@ -28,11 +28,11 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Brand Header */}
       <div className="p-6 border-b border-white/10 flex items-center gap-3 bg-white/5 backdrop-blur-sm">
         <div className="bg-gradient-to-br from-emerald-500 to-green-600 p-2.5 rounded-xl shadow-lg shadow-emerald-900/20">
-          <Tractor size={24} className="text-white" strokeWidth={2} />
+          <BrainCircuit size={24} className="text-white" strokeWidth={2} />
         </div>
         <div>
-          <h1 className="font-bold text-lg leading-tight tracking-tight text-white">农机智脑</h1>
-          <p className="text-[10px] text-emerald-400 font-medium tracking-wider uppercase">AgriSmart Pro</p>
+          <h1 className="font-bold text-lg leading-tight tracking-tight text-white">AgriBrain</h1>
+          <p className="text-[10px] text-emerald-400 font-medium tracking-wider uppercase">农机智脑系统</p>
         </div>
       </div>
 

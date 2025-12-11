@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Send, Menu, Mic, Paperclip, Loader2, Zap, Sparkles, Tractor, CalendarClock, Stethoscope, ArrowRight } from 'lucide-react';
+import { Send, Menu, Mic, Paperclip, Loader2, Zap, Sparkles, Tractor, CalendarClock, Stethoscope, ArrowRight, BrainCircuit } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Sidebar from './components/Sidebar';
@@ -289,11 +289,11 @@ const App: React.FC = () => {
 
         <div className="glass-panel w-full max-w-md p-8 rounded-3xl relative z-10 shadow-2xl animate-fade-in border border-white/10">
           <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-500/20 transform rotate-[-6deg] hover:rotate-0 transition-transform duration-500 border border-white/20">
-              <Tractor className="w-10 h-10 text-white drop-shadow-md" strokeWidth={1.5} />
+            <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-500/20 transform rotate-[-6deg] hover:rotate-0 transition-transform duration-500 border border-white/20 group">
+              <BrainCircuit className="w-10 h-10 text-white drop-shadow-md group-hover:scale-110 transition-transform" strokeWidth={1.5} />
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 tracking-tight">AgriSmart <span className="text-emerald-600">Pro</span></h1>
-            <p className="text-slate-600 mt-2 font-medium">农机智能运维与数据分析平台</p>
+            <h1 className="text-4xl font-bold text-slate-900 tracking-tight">AgriBrain <span className="text-emerald-600">智脑</span></h1>
+            <p className="text-slate-600 mt-2 font-medium">农机全生命周期智能运维平台</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
@@ -315,7 +315,7 @@ const App: React.FC = () => {
               <Send size={18} />
             </button>
             <p className="text-center text-xs text-slate-400 mt-4">
-               AgriSmart Intelligent Operations System v2.0
+               AgriBrain Intelligent Operations System v2.0
             </p>
           </form>
         </div>
@@ -355,7 +355,7 @@ const App: React.FC = () => {
                  {activeMode === 'operations' && <Tractor size={18} className="text-emerald-500" />}
                  {activeMode === 'scheduling' && <CalendarClock size={18} className="text-blue-500" />}
                  {activeMode === 'diagnosis' && <Stethoscope size={18} className="text-amber-500" />}
-                 {activeMode === 'operations' ? '农机运营选型' : activeMode === 'scheduling' ? '作业调度排期' : activeMode === 'diagnosis' ? '农机故障诊断' : '农机智能助手'}
+                 {activeMode === 'operations' ? '农机运营选型' : activeMode === 'scheduling' ? '作业调度排期' : activeMode === 'diagnosis' ? '农机故障诊断' : '农机智脑 AgriBrain'}
                </h2>
                <div className="flex items-center gap-1.5">
                  <span className={`w-2 h-2 rounded-full animate-pulse ${activeMode ? 'bg-emerald-500' : 'bg-slate-300'}`}></span>
@@ -378,7 +378,7 @@ const App: React.FC = () => {
           <div className="flex-1 overflow-y-auto p-8 flex flex-col items-center justify-center animate-fade-in">
              <div className="text-center mb-10 max-w-lg">
                 <h1 className="text-3xl font-bold text-slate-800 mb-3">您好，{username}</h1>
-                <p className="text-slate-500 text-lg">请选择您今天要处理的业务类型</p>
+                <p className="text-slate-500 text-lg">欢迎使用 <strong>AgriBrain</strong> 农机智脑</p>
              </div>
 
              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
