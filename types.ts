@@ -3,6 +3,8 @@ export enum MessageRole {
   MODEL = 'model'
 }
 
+export type ChatMode = 'operations' | 'scheduling' | 'diagnosis';
+
 export interface ChatMessage {
   role: MessageRole;
   text: string;
@@ -27,6 +29,7 @@ export interface AppContextState {
 export interface ChatSession {
   id: string;
   title: string;
+  mode: ChatMode; // Added mode to session
   messages: ChatMessage[];
   lastModified: number; // timestamp for sorting
 }
