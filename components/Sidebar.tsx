@@ -1,5 +1,5 @@
 import React from 'react';
-import { History, PlusCircle, Settings, LogOut, User, Tractor, Trash2, MessageSquare, BrainCircuit } from 'lucide-react';
+import { History, PlusCircle, Settings, LogOut, User, Tractor, Trash2, MessageSquare, BrainCircuit, Eye } from 'lucide-react';
 import { ChatSession } from '../types';
 
 interface SidebarProps {
@@ -11,6 +11,7 @@ interface SidebarProps {
   onDeleteSession: (e: React.MouseEvent, sessionId: string) => void;
   username: string;
   onLogout: () => void;
+  visitorCount: number;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ 
@@ -21,7 +22,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   onSelectSession, 
   onDeleteSession,
   username,
-  onLogout
+  onLogout,
+  visitorCount
 }) => {
   return (
     <div className={`${isOpen ? 'w-72' : 'w-0'} transition-all duration-300 overflow-hidden bg-gradient-to-b from-slate-900 via-slate-800 to-slate-950 text-white flex flex-col border-r border-slate-700/50 h-full flex-shrink-0 relative shadow-2xl z-20`}>
@@ -94,6 +96,14 @@ const Sidebar: React.FC<SidebarProps> = ({
             </ul>
           )}
         </div>
+      </div>
+
+      {/* Visitor Count Badge (Bottom Left) */}
+      <div className="px-4 pb-2 bg-gradient-to-b from-transparent to-black/20">
+          <div className="flex items-center justify-between text-[10px] text-slate-400 bg-white/5 rounded-lg px-3 py-2 border border-white/5">
+             <span className="flex items-center gap-1.5"><Eye size={12} className="text-emerald-500"/> 系统访问量</span>
+             <span className="font-mono text-emerald-100 font-medium">{visitorCount.toLocaleString()}</span>
+          </div>
       </div>
 
       {/* User Footer */}

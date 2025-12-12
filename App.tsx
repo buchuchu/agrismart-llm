@@ -28,6 +28,9 @@ const App: React.FC = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
 
+  // --- Visitor Count State ---
+  const [visitorCount, setVisitorCount] = useState(15320);
+
   // --- Right Panel State (File Data) ---
   const [appState, setAppState] = useState<AppContextState>({
     isDataLoaded: false,
@@ -39,6 +42,23 @@ const App: React.FC = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // --- Visitor Counter Logic ---
+  useEffect(() => {
+    const STORAGE_KEY = 'agribrain_visitor_count';
+    const storedCount = localStorage.getItem(STORAGE_KEY);
+    
+    let count = 15320; // Default initial value
+    if (storedCount) {
+      count = parseInt(storedCount, 10);
+    }
+    
+    // Increment on every "entry" (app mount)
+    count += 1;
+    
+    setVisitorCount(count);
+    localStorage.setItem(STORAGE_KEY, count.toString());
+  }, []);
 
   // --- History Management Logic ---
 
@@ -336,6 +356,7 @@ const App: React.FC = () => {
         onDeleteSession={handleDeleteSession}
         username={username}
         onLogout={handleLogout}
+        visitorCount={visitorCount}
       />
 
       {/* Center Chat Area */}
